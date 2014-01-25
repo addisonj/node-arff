@@ -151,13 +151,11 @@ ArffData.prototype = {
   // create two training sets by randomly splitting a full training set
   // according to some ratio
   randomSplit: function(opts) {
-    var training = this.trainingSet(opts);
-    var split = [[], []]
-    while (training.length > 0) {
-      var set = this.getRandom() < opts.ratio ? 0 : 1
-      split[set].push(training.pop());
-    }
-    return split;
+    var all = this.randomizeArray(this.trainingSet(opts));
+    var part = Math.round(all.length * opts.ratio);
+    var training = all.splice(0, part);
+
+    return [training, all];
   }
 }
 
