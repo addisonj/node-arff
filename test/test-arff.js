@@ -91,6 +91,11 @@ module.exports = {
     test.equal(training[5].expect, 1);
     test.done();
   },
+  'filter out fields': function(test) {
+    var training = this.dataset.trainingSet({filter: ["color"]})
+    test.equal(training[0].data.length, 3);
+    test.done();
+  },
   'random number can be seeded to get consistent results': function(test) {
     // should still get a random numbers that are consistent from run to run
     this.dataset.setRandomSeed("boop");

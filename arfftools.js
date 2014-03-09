@@ -119,14 +119,29 @@ ArffData.prototype = {
   // options:
   //  - expect: the field that contains the expected value (default=the last field)
   //  - fields: fields to include in the data set (default=all fields)
+  //  - filter: fields to filter in the data set (default=[]), if set this
+  //    will also add the expect field
   //  - limit: limit the training set to this size (default none, includes all data)
   //  - isolate: name of an output class to isolate; sets the 'expect' field to
   //    1 if the expect value matches that output class, and to 0 if not
   trainingSet: function(opts) {
-    if (!opts) opts = {}
+    if (!opts) opts = {};
 
-    var expect = opts.expect || this.attributes[this.attributes.length-1]
-    var fields = opts.fields || this.attributes.slice(0, this.attributes.length-1)
+    var expect = opts.expect || this.attributes[this.attributes.length-1];
+    var fields = this.attributes.slice(0, this.attributes.length-1);
+    if (opts.fields) {
+      fields = opts.fields;
+    } else if (opts.filter) {
+      var filterSet = {};
+      opts.filter.map(function(field) {
+        filterSet[field] = true;
+      });
+      fields = this.attributes.filter(function(field) {
+        if (filterSet[field]) return false;
+        if (field === expect) return false;
+        return true;
+      });
+    }
     var limit = opts.limit || this.data.length;
 
     var set = [];
