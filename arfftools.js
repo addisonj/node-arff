@@ -41,9 +41,10 @@ ArffData.prototype = {
     // no such column, return undefined
     if (idx < 0) return min;
 
+    min = Number.MAX_VALUE;
     for(var i=0; i<this.data.length; i++) {
       var val = this.data[i][col];
-      if (min===undefined || val < min) {
+      if (!Number.isNaN(val) && val < min) {
         min = val;
       }
     }
@@ -57,9 +58,10 @@ ArffData.prototype = {
     // no such column, return undefined
     if (idx < 0) return max;
 
+    max = Number.MIN_VALUE;
     for(var i=0; i<this.data.length; i++) {
       var val = this.data[i][col];
-      if (max===undefined || val > max) {
+      if (!Number.isNaN(val) && val > max) {
         max = val;
       }
     }
